@@ -10,7 +10,7 @@ namespace AISDE_nr1
     {
         static void Main(string[] args)
         {
-            jkhkjsahfj;
+            safsafsL:
         }
     }
 }
