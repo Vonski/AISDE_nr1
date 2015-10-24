@@ -4,9 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AISDE_nr1
+namespace C_sharp
 {
-    interface IPriorityQueue
+    interface IPriorityQueue<ElementType>
     {
+        void Add(ElementType element);
+        void Delete();
+        void WriteOut();
     }
 }
