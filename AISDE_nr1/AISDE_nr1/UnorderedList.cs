@@ -17,8 +17,7 @@ namespace C_sharp
         {
             if (table.Length == counter)
             {
-                int j = table.Length * 10;
-                ElementType[] table_tmp = new ElementType[j];
+                ElementType[] table_tmp = new ElementType[table.Length * 10];
                 for (int i = 0; i < table.Length; i++)
                 {
                     table_tmp[i] = table[i];
@@ -30,14 +29,12 @@ namespace C_sharp
 
         public void Delete()
         {
-            ElementType[] tmp = new ElementType[1];
-            ElementType[] tmp2 = new ElementType[1];
-            tmp[0] = table[0];
+            ElementType tmp = table[0];
             int min = 0;
             for (int i = 1; i < table.Length; i++)
             {
-                tmp[0] = (Comparer<ElementType>.Default.Compare(table[i], tmp[0]) < 0) ? table[i] : tmp[0];
-                if (((Comparer<ElementType>.Default.Compare(table[i], tmp[0]) == 0) ? true : false) && ((Comparer<ElementType>.Default.Compare(tmp[0], tmp2[0]) != 0) ? true : false))
+                tmp = (Comparer<ElementType>.Default.Compare(table[i], tmp) < 0) ? table[i] : tmp;
+                if (((Comparer<ElementType>.Default.Compare(table[i], tmp) == 0) ? true : false) && ((Comparer<ElementType>.Default.Compare(tmp, default(ElementType)) != 0) ? true : false))
                 {
                     min = i;
                 }
@@ -46,7 +43,7 @@ namespace C_sharp
             {
                 table[i] = table[i + 1];
             }
-            table[table.Length - 1] = tmp2[0];
+            table[table.Length - 1] = default(ElementType);
         }
 
         public void WriteOut()
