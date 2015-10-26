@@ -32,10 +32,9 @@ namespace C_sharp
 
         public void Delete()
         {
-            int last = counter - 1;
+            int last = --counter;
             table[0] = table[last];
             table[last] = default(ElementType);
-            counter--;
             PushDown(0);
         }
 
