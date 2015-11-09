@@ -34,7 +34,7 @@ namespace C_sharp
             ElementType[] tmp2 = new ElementType[1];
             tmp[0] = table[0];
             int min = 0;
-            for (int i = 1; i < table.Length; i++)
+            for (int i = 1; i < counter; i++)
             {
                 tmp[0] = (Comparer<ElementType>.Default.Compare(table[i], tmp[0]) < 0) ? table[i] : tmp[0];
                 if (((Comparer<ElementType>.Default.Compare(table[i], tmp[0]) == 0) ? true : false) && ((Comparer<ElementType>.Default.Compare(tmp[0], tmp2[0]) != 0) ? true : false))
@@ -42,7 +42,7 @@ namespace C_sharp
                     min = i;
                 }
             }
-            for (int i = min; i < table.Length - 1; i++)
+            for (int i = min; i < counter - 1; i++)
             {
                 table[i] = table[i + 1];
             }
