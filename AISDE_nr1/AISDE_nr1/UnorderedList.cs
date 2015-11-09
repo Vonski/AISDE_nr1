@@ -44,6 +44,7 @@ namespace C_sharp
                 table[i] = table[i + 1];
             }
             table[table.Length - 1] = default(ElementType);
+            counter--;
         }
 
         public void WriteOut()
@@ -52,6 +53,11 @@ namespace C_sharp
             {
                 System.Console.WriteLine(current);
             }
+        }
+
+        public int length()
+        {
+            return counter;
         }
 
     }

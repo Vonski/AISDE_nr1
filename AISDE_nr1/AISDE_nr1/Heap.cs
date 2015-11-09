@@ -108,6 +108,11 @@ namespace C_sharp
             }
 
         }
+
+        public int length()
+        {
+            return counter;
+        }
     }
     
 }
