@@ -43,6 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Buffer.cs" />
     <Compile Include="Element.cs" />
     <Compile Include="Heap.cs" />
     <Compile Include="IPriorityQueue.cs" />
