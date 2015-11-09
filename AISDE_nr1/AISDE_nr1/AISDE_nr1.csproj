@@ -43,8 +43,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Fifo.cs" />
     <Compile Include="Heap.cs" />
     <Compile Include="IPriorityQueue.cs" />
+    <Compile Include="Packet.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RandomValueGenerator.cs" />
