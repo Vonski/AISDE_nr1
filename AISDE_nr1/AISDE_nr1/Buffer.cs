@@ -8,7 +8,7 @@ namespace AISDE_nr1
 {
     class Buffer
     {
-        private Packet[] table = new Packet[10];
+        private Packet[] table = new Packet[1000];
         private int first;
         private int last;
         private int counter = 0;
