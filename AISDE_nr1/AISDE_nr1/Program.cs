@@ -11,7 +11,7 @@ namespace AISDE_nr1
 {
     class Program
     {
-       static int M = 100, N = 100, A = 1, B = 10;
+       static int M = 0, N = 0, A = 0, B = 0;
 
         static void Test<T>(T queue)
             where T: IPriorityQueue<Element>
@@ -36,7 +36,7 @@ namespace AISDE_nr1
 
         static void Main(string[] args)
         {
-           /* int option = 1;
+            int option = 1;
             if (option == 1)
             {
                 try
@@ -53,18 +53,42 @@ namespace AISDE_nr1
                 {
                     Console.WriteLine("The file could not be read:");
                     Console.WriteLine(e.Message);
-                }*/
+                }
 
-                System.IO.StreamWriter filestream_list = new System.IO.StreamWriter("timelist.txt", true);
-                System.IO.StreamWriter filestream_heap = new System.IO.StreamWriter("timeheap.txt", true);
+               /* System.IO.StreamWriter filestream_list = new System.IO.StreamWriter("timelist.txt", false);
+                System.IO.StreamWriter filestream_heap = new System.IO.StreamWriter("timeheap.txt", false);
                 Stopwatch stopwatch = new Stopwatch();
                 UnorderedList<Element> unordered_list = new UnorderedList<Element>();
                 Heap<Element> heap = new Heap<Element>();
 
-                while(A<=500)
+                           
+                while(A<=1000)
                 {               
-                    
-                    stopwatch.Start();
+                    if(A==1)
+                    {
+                        for(int n=0; n<2; n++)
+                        {
+                            stopwatch.Restart();
+                            Test<UnorderedList<Element>>(unordered_list);
+                            stopwatch.Stop();
+                            TimeSpan a = stopwatch.Elapsed;
+
+
+                            stopwatch.Restart();
+                            Test<Heap<Element>>(heap);
+                            stopwatch.Stop();
+                            TimeSpan b = stopwatch.Elapsed;
+
+
+                            string timelist1 = a.TotalMilliseconds.ToString();
+                            string timeheap1 = b.TotalMilliseconds.ToString();
+
+                            filestream_list.WriteLine(timelist1);
+                            filestream_heap.WriteLine(timeheap1);
+                        }
+                    }
+
+                    stopwatch.Restart();
                     Test<UnorderedList<Element>>(unordered_list);
                     stopwatch.Stop();
                     TimeSpan x = stopwatch.Elapsed;
@@ -85,29 +109,31 @@ namespace AISDE_nr1
                     A++;
                 }
                 filestream_list.Close();
-                filestream_heap.Close();
-                
+                filestream_heap.Close();*/
 
-                /*string elapsedTimeList = String.Format("{0:00}min {1:00}s {2:00}ms", x.Minutes, x.Seconds, x.Milliseconds);
-                string elapsedTimeHeap = String.Format("{0:00}min {1:00}s {2:00}ms", y.Minutes, y.Seconds, y.Milliseconds);
+                Stopwatch stopwatch = new Stopwatch();
+                UnorderedList<Element> unordered_list = new UnorderedList<Element>();
+                Heap<Element> heap = new Heap<Element>();
 
-                try
-                {
-                    string path = "output.txt";
-                    using (FileStream fs = File.Create(path))
-                    {
-                        Byte[] output = new UTF8Encoding(true).GetBytes(
-                            "M=" + M + "\r\nN=" + N + "\r\nA=" + A + "\r\nB=" + B +
+                stopwatch.Restart();
+                Test<UnorderedList<Element>>(unordered_list);
+                stopwatch.Stop();
+                TimeSpan x = stopwatch.Elapsed;
+
+
+                stopwatch.Restart();
+                Test<Heap<Element>>(heap);
+                stopwatch.Stop();
+                TimeSpan y = stopwatch.Elapsed;
+
+                string elapsedTimeList = x.TotalMilliseconds.ToString() + "ms";
+                string elapsedTimeHeap = y.TotalMilliseconds.ToString() + "ms";
+
+                System.IO.File.WriteAllText("output.txt", "M=" + M + "\r\nN=" + N + "\r\nA=" + A + "\r\nB=" + B +
                             "\r\nUnordered List: " + elapsedTimeList + "\r\nHeap: " + elapsedTimeHeap);
-                        fs.Write(output, 0, output.Length);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex.ToString());
-                }
+                
             }
-        */
+        
 
             
         }
