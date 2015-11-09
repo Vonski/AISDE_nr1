@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace AISDE_nr1
 {
-    class Packet : IComparable
+    class Packet : IComparable,ICloneable
     {
         public int size;
         public int priority;
@@ -15,6 +15,11 @@ namespace AISDE_nr1
         {
             size = 1;
             priority = 1;
+        }
+
+        public Object Clone()
+        {
+            return MemberwiseClone();
         }
 
         private class sortSizeHelper : IComparer<Packet>
