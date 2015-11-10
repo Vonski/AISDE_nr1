@@ -17,19 +17,23 @@ namespace AISDE_nr1
             where T: IPriorityQueue<Element>
         {
             Element element = new Element();
+            Element element2 = new Element();
+
             Random random = new Random();
 
             for (int i = 0; i < A; i++)
             {
-                element.SetKey(random.Next(1, M));
-                queue.Add(element);
+                element2 = (Element)element.Clone();
+                element2.SetKey(random.Next(1, M));
+                queue.Add(element2);
             }
 
             for (int i=0; i<B; i++)
             {
+                element2 = (Element)element.Clone();
                 queue.Delete();
-                element.SetKey(random.Next(1, N));
-                queue.Add(element);
+                element2.SetKey(random.Next(1, N));
+                queue.Add(element2);
             }
 
         }
@@ -55,6 +59,7 @@ namespace AISDE_nr1
                     Console.WriteLine(e.Message);
                 }
 
+                //---------------------------------------------------------------------(DO WYKRESU)
                /* System.IO.StreamWriter filestream_list = new System.IO.StreamWriter("timelist.txt", false);
                 System.IO.StreamWriter filestream_heap = new System.IO.StreamWriter("timeheap.txt", false);
                 Stopwatch stopwatch = new Stopwatch();
@@ -110,6 +115,7 @@ namespace AISDE_nr1
                 }
                 filestream_list.Close();
                 filestream_heap.Close();*/
+                //---------------------------------------------------------------------------------
 
                 Stopwatch stopwatch = new Stopwatch();
                 UnorderedList<Element> unordered_list = new UnorderedList<Element>();
@@ -131,7 +137,24 @@ namespace AISDE_nr1
 
                 System.IO.File.WriteAllText("output.txt", "M=" + M + "\r\nN=" + N + "\r\nA=" + A + "\r\nB=" + B +
                             "\r\nUnordered List: " + elapsedTimeList + "\r\nHeap: " + elapsedTimeHeap);
+
+               
+            }
+
+            else if(option==2)
+            {
+                Element e1 = new Element();
+                Element e2 = new Element();
+                e1.SetKey(5);
+                e2 = (Element)e1.Clone();
+                e1.SetKey(6);
+                Console.WriteLine(e2.Key);
+                e2 = (Element)e1.Clone();
+                Console.WriteLine(e2.Key);
+
                 
+                Console.Read();
+
             }
         
 

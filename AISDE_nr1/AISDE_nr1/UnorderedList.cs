@@ -48,9 +48,9 @@ namespace C_sharp
 
         public void WriteOut()
         {
-            foreach (ElementType current in table)
+            for (int n = 0; n < counter; n++)
             {
-                System.Console.WriteLine(current);
+                System.Console.WriteLine(table[n].ToString());
             }
         }
 

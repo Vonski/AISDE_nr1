@@ -40,12 +40,13 @@ namespace C_sharp
 
         public void WriteOut()
         {
-            foreach (ElementType current in table)
+            for (int n = 0; n < counter; n++ )
             {
-                System.Console.WriteLine(current);
+                System.Console.WriteLine(table[n].ToString());
             }
         }
 
+       
         private void PushUp(int i)
         {
             var result = Comparer<ElementType>.Default.Compare(table[i], table[(i - 1) / 2]);

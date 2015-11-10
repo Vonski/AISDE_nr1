@@ -6,8 +6,25 @@ using System.Threading.Tasks;
 
 namespace AISDE_nr1
 {
-    class Element :IComparable
+    class Element :IComparable, ICloneable
     {
+        public int Key;
+
+        public void SetKey(int i)
+        {
+            Key = i;
+        }
+
+         public override string ToString()
+        {
+            return base.ToString() + ": " + Key.ToString();
+        }
+
+
+        public Object Clone()
+        {
+            return MemberwiseClone();
+        }
         private class ComparingKeysHelper :IComparer<Element>
         {
             int IComparer<Element>.Compare(Element e1, Element e2)
@@ -20,13 +37,7 @@ namespace AISDE_nr1
                     return 0;
             }
         }
-
-        private int Key;
-
-        public void SetKey(int i)
-        {
-            Key = i;
-        }
+      
 
         public static IComparer<Element> ComparingKeys()
         {
