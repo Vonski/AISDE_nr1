@@ -1,5 +1,4 @@
-﻿using C_sharp;
-using System;
+﻿using System;
 using System.IO;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -11,7 +10,7 @@ namespace AISDE_nr1
 {
     class Program
     {
-       static int M = 0, N = 0, A = 0, B = 0;
+       static int M = 1000, N = 1000, A = 1, B = 10000;
 
         static void Test<T>(T queue)
             where T: IPriorityQueue<Element>
@@ -40,10 +39,10 @@ namespace AISDE_nr1
 
         static void Main(string[] args)
         {
-            int option = 1;
+            int option = 2;
             if (option == 1)
             {
-                try
+               /* try
                 {
                     using (StreamReader sr = new StreamReader("input.txt"))
                     {
@@ -57,26 +56,28 @@ namespace AISDE_nr1
                 {
                     Console.WriteLine("The file could not be read:");
                     Console.WriteLine(e.Message);
-                }
+                }*/
 
                 //---------------------------------------------------------------------(DO WYKRESU)
-               /* System.IO.StreamWriter filestream_list = new System.IO.StreamWriter("timelist.txt", false);
-                System.IO.StreamWriter filestream_heap = new System.IO.StreamWriter("timeheap.txt", false);
+                //System.IO.StreamWriter filestream_list = new System.IO.StreamWriter("timelist.txt", false);
+                for(int n=0; n<50;n++)
+                {
+                    string str = n.ToString() + ".txt";
+                System.IO.StreamWriter filestream_heap = new System.IO.StreamWriter(str, false);
                 Stopwatch stopwatch = new Stopwatch();
                 UnorderedList<Element> unordered_list = new UnorderedList<Element>();
                 Heap<Element> heap = new Heap<Element>();
-
                            
-                while(A<=1000)
+                while(A<=10000)
                 {               
-                    if(A==1)
+                    /*if(A==1)
                     {
                         for(int n=0; n<2; n++)
                         {
                             stopwatch.Restart();
                             Test<UnorderedList<Element>>(unordered_list);
                             stopwatch.Stop();
-                            TimeSpan a = stopwatch.Elapsed;
+                            TimeSpan a = stopwatch.Elapsed
 
 
                             stopwatch.Restart();
@@ -85,18 +86,18 @@ namespace AISDE_nr1
                             TimeSpan b = stopwatch.Elapsed;
 
 
-                            string timelist1 = a.TotalMilliseconds.ToString();
+                           // string timelist1 = a.TotalMilliseconds.ToString();
                             string timeheap1 = b.TotalMilliseconds.ToString();
 
-                            filestream_list.WriteLine(timelist1);
+                            //filestream_list.WriteLine(timelist1);
                             filestream_heap.WriteLine(timeheap1);
                         }
-                    }
+                    }*/
 
-                    stopwatch.Restart();
+                    /*stopwatch.Restart();
                     Test<UnorderedList<Element>>(unordered_list);
                     stopwatch.Stop();
-                    TimeSpan x = stopwatch.Elapsed;
+                    TimeSpan x = stopwatch.Elapsed;*/
 
 
                     stopwatch.Restart();
@@ -105,19 +106,22 @@ namespace AISDE_nr1
                     TimeSpan y = stopwatch.Elapsed;
 
                     
-                    string timelist = x.TotalMilliseconds.ToString();
+                    //string timelist = x.TotalMilliseconds.ToString();
                     string timeheap = y.TotalMilliseconds.ToString();
 
-                    filestream_list.WriteLine(timelist);
+                   // filestream_list.WriteLine(timelist);
                     filestream_heap.WriteLine(timeheap);
                    
-                    A++;
+                    A=A+10;
                 }
-                filestream_list.Close();
-                filestream_heap.Close();*/
+                //filestream_list.Close();
+                filestream_heap.Close();
+                A = 1;
+            }
+                
                 //---------------------------------------------------------------------------------
 
-                Stopwatch stopwatch = new Stopwatch();
+                /*Stopwatch stopwatch = new Stopwatch();
                 UnorderedList<Element> unordered_list = new UnorderedList<Element>();
                 Heap<Element> heap = new Heap<Element>();
 
@@ -136,24 +140,40 @@ namespace AISDE_nr1
                 string elapsedTimeHeap = y.TotalMilliseconds.ToString() + "ms";
 
                 System.IO.File.WriteAllText("output.txt", "M=" + M + "\r\nN=" + N + "\r\nA=" + A + "\r\nB=" + B +
-                            "\r\nUnordered List: " + elapsedTimeList + "\r\nHeap: " + elapsedTimeHeap);
+                            "\r\nUnordered List: " + elapsedTimeList + "\r\nHeap: " + elapsedTimeHeap);*/
 
                
             }
 
             else if(option==2)
             {
-                Element e1 = new Element();
-                Element e2 = new Element();
-                e1.SetKey(5);
-                e2 = (Element)e1.Clone();
-                e1.SetKey(6);
-                Console.WriteLine(e2.Key);
-                e2 = (Element)e1.Clone();
-                Console.WriteLine(e2.Key);
+                Router router = new Router(80, 4, 4);
+                router.packetToBuffer(router.streams[0]);
+                router.packetToBuffer(router.streams[1]);
+                router.send();
+                int p = 0, s = 0;
+                for (int i = 0; i < 40; i++)
+                {
+                    int n = router.heap.first().action;
+                    if(n == (int)Router.actions.packet_to_buffer)
+                    {
+                        router.packetToBuffer(router.streams[0]);
+                        p++;
+                    }
+                    else if(n == (int)Router.actions.send)
+                    {
+                        router.send();
+                        s++;
+                    }          
+
+                }
+                router.heap.WriteOut();
+                Console.WriteLine(p);
+                Console.WriteLine(s);
+
+                    Console.Read();
 
                 
-                Console.Read();
 
             }
         

@@ -7,14 +7,18 @@ using System.Threading.Tasks;
 namespace AISDE_nr1
 {
     class Stream
-    {
-        int priority;
+    { 
+        public int priority;
+        public double lambda;
+        public int buffer_number;
         RandomValueGenerator random_value_generator;
 
         public Stream()
         {
             random_value_generator = new RandomValueGenerator();
             priority = 1;
+            lambda = 1;
+            buffer_number = 1;
         }
         public Stream(int priority)
         {   

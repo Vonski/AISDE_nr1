@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace AISDE_nr1
 {
-    class Heap<ElementType> : IPriorityQueue<ElementType>
+    class Heap2<ElementType> : IPriorityQueue<ElementType>
     {
         //Fields:
         public ElementType[] table = new ElementType[1];
-        int counter = 0;
+        public int counter = 0;
 
 
         //Methods:
@@ -40,18 +40,18 @@ namespace AISDE_nr1
 
         public void WriteOut()
         {
-            for (int n = 0; n < counter; n++ )
+            for (int n = 0; n < counter; n++)
             {
                 System.Console.WriteLine(table[n].ToString());
             }
         }
 
-       
+
         private void PushUp(int i)
         {
             var result = Comparer<ElementType>.Default.Compare(table[i], table[(i - 1) / 2]);
 
-            while (i >= 1 && result > 0)
+            while (i >= 1 && result < 0)
             {
                 ElementType tmp = table[i];
                 table[i] = table[(i - 1) / 2];
@@ -68,10 +68,10 @@ namespace AISDE_nr1
             while (2 * i + 2 <= counter - 1)
             {
                 var result = Comparer<ElementType>.Default.Compare(table[2 * i + 1], table[2 * i + 2]);
-                if (result > 0)
+                if (result < 0)
                 {
                     var result1 = Comparer<ElementType>.Default.Compare(table[i], table[2 * i + 1]);
-                    if (result1 < 0)
+                    if (result1 > 0)
                     {
                         ElementType tmp = table[i];
                         table[i] = table[2 * i + 1];
@@ -84,7 +84,7 @@ namespace AISDE_nr1
                 else
                 {
                     var result2 = Comparer<ElementType>.Default.Compare(table[i], table[2 * i + 2]);
-                    if (result2 < 0)
+                    if (result2 > 0)
                     {
                         ElementType tmp = table[i];
                         table[i] = table[2 * i + 2];
@@ -100,7 +100,7 @@ namespace AISDE_nr1
             if (2 * i + 1 == counter - 1)
             {
                 var result3 = Comparer<ElementType>.Default.Compare(table[i], table[2 * i + 1]);
-                if (result3 < 0)
+                if (result3 > 0)
                 {
                     ElementType tmp = table[i];
                     table[i] = table[2 * i + 1];
@@ -109,12 +109,12 @@ namespace AISDE_nr1
             }
 
         }
-        
+
         public ElementType first()
         {
             return table[0];
         }
     }
-    
+
 }
 

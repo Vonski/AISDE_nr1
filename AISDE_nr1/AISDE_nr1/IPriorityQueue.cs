@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace C_sharp
+namespace AISDE_nr1
 {
     interface IPriorityQueue<ElementType>
     {
