@@ -20,11 +20,20 @@ namespace AISDE_nr1
             lambda = 1;
             buffer_number = 1;
         }
-        public Stream(int priority)
+
+        public Stream(int number)
+        {
+            random_value_generator = new RandomValueGenerator();
+            priority = 1;
+            lambda = 1;
+            buffer_number = number;
+        }
+
+        /*public Stream(int priority)
         {   
            random_value_generator = new RandomValueGenerator();
            this.priority = priority;
-        }
+        }*/
 
         public Packet GeneratePacket(double lambda)
         {

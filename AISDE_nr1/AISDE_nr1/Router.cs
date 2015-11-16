@@ -54,6 +54,7 @@ namespace AISDE_nr1
                 streams[i] = new Stream();
                 streams[i].priority = i;
                 streams[i].lambda = 0.05;
+                streams[i].buffer_number = i;
             }
             heap = new Heap2<Times>();
 
@@ -65,10 +66,11 @@ namespace AISDE_nr1
             Packet packet = streams[stream_id].GeneratePacket(streams[stream_id].lambda);
             Times times = new Times();
             int t = heap.first().time;
-            times.time = streams[stream_id].GenerateTime(streams[stream_id].lambda) + t;
+            int pom = streams[stream_id].GenerateTime(streams[stream_id].lambda);
+            times.time = pom + t;
             times.action = (int)actions.packet_to_buffer;
             times.stream_id = stream_id;
-            if (heap.counter!=0)
+            if (heap.counter!=0 && heap.first().stream_id==stream_id)
                 heap.Delete();
             heap.Add(times);
             buffers[streams[stream_id].buffer_number].Add(packet);
@@ -86,7 +88,7 @@ namespace AISDE_nr1
                     int t = heap.first().time;
                     times.time = ((buffers[i].table[buffers[i].last].size)*1000 / channel_capacity) + t;
                     times.action = (int)actions.send;
-                    if(heap.counter!=0)
+                    if(heap.counter!=0 && heap.first().action==1)
                         heap.Delete();
                     heap.Add(times);
                     buffers[i].PullOut();
@@ -94,9 +96,19 @@ namespace AISDE_nr1
                     return true;
                 }
             }
+            if (heap.counter != 0 && heap.first().action == 1)
+                heap.Delete();
             flag = false;
             return false; 
         }                 
         
+        public void SendIni(int time)
+        {
+            Times times = new Times();
+            times.action = 1;
+            times.time = time;
+            heap.Add(times);
+        }
+
     }
 }
