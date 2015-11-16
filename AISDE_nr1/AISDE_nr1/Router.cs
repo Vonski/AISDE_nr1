@@ -23,6 +23,7 @@ namespace AISDE_nr1
         {
             public int time;
             public int action;
+            public int stream_id;
             int IComparable.CompareTo(object obj)
             {
                 Times times = (Times)obj;
@@ -52,24 +53,25 @@ namespace AISDE_nr1
             {
                 streams[i] = new Stream();
                 streams[i].priority = i;
-                streams[i].lambda = 0.2;
+                streams[i].lambda = 0.05;
             }
             heap = new Heap2<Times>();
 
 
         }
 
-        public void packetToBuffer(Stream stream)
+        public void packetToBuffer(int stream_id)
         {
-            Packet packet = stream.GeneratePacket(stream.lambda);
+            Packet packet = streams[stream_id].GeneratePacket(streams[stream_id].lambda);
             Times times = new Times();
             int t = heap.first().time;
-            times.time = stream.GenerateTime(stream.lambda) + t;
+            times.time = streams[stream_id].GenerateTime(streams[stream_id].lambda) + t;
             times.action = (int)actions.packet_to_buffer;
+            times.stream_id = stream_id;
             if (heap.counter!=0)
                 heap.Delete();
             heap.Add(times);
-            buffers[stream.buffer_number].Add(packet);
+            buffers[streams[stream_id].buffer_number].Add(packet);
             if (flag == false)
                 send();
         }
