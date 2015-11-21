@@ -32,7 +32,6 @@ namespace AISDE_nr1
         TimeSpan simulation;
         TimeSpan free_link;
         TimeSpan[] free_buffers;
-        TimeSpan packet_processing;
         double free_link_mil;
         double[] free_buffers_mil;
         double[] free_buffers_size;
@@ -121,6 +120,7 @@ namespace AISDE_nr1
             Packet packet = streams[stream_id].GeneratePacket();
             Times times = new Times();
             int t = heap.first().time;
+            packet.adding_time = t;
             int pom = streams[stream_id].GenerateTime();
             times.time = pom + t;
             times.action = (int)actions.packet_to_buffer;
@@ -137,10 +137,6 @@ namespace AISDE_nr1
                 free_buffers_mil[streams[stream_id].buffer_number] = free_buffers[streams[stream_id].buffer_number].TotalMilliseconds;
                 free_buffers_size[streams[stream_id].buffer_number] += free_buffers_mil[streams[stream_id].buffer_number] * size;
                 free_buffers_timer[streams[stream_id].buffer_number].Restart();
-                if (packet_processing_mil != 0)
-                    packet_processing_mil = (packet_processing_mil + packet.size) / 2;
-                else
-                    packet_processing_mil = (packet_processing_mil + packet.size);
             }
             else
             {
@@ -172,6 +168,7 @@ namespace AISDE_nr1
                     free_buffers[i] = free_buffers_timer[i].Elapsed;
                     free_buffers_mil[i] = free_buffers[i].TotalMilliseconds;
                     free_buffers_size[i] += free_buffers_mil[i] * buffers[i].buffer_size;
+                    packet_processing_mil = (packet_processing_mil + t - buffers[i].table[buffers[i].first].adding_time) / 2;
                     buffers[i].PullOut();
                     free_buffers_timer[i].Restart();
                     flag = true;
@@ -188,10 +185,10 @@ namespace AISDE_nr1
         public void ReadFromFile()
         {
             Console.WriteLine("Przeciagnij plik inicjalizacyjny i wcisnij enter:");
-            //string str = Console.ReadLine();
-            //if (str[0] == '"')
-            //    str = str.Substring(1,str.Length-2);
-            string str = "F:\\Multimedia\\Dokumenty\\Studia\\PW Notatki\\Semestr 3\\AISDE\\Projekty\\Projekt1\\AISDE_nr1\\AISDE_nr1\\bin\\Debug\\Download\\Input\\router.txt";
+            string str = Console.ReadLine();
+            if (str[0] == '"')
+                str = str.Substring(1,str.Length-2);
+            //string str = "F:\\Multimedia\\Dokumenty\\Studia\\PW Notatki\\Semestr 3\\AISDE\\Projekty\\Projekt1\\AISDE_nr1\\AISDE_nr1\\bin\\Debug\\Download\\Input\\router.txt";
             FileStream fs = new FileStream(str, FileMode.OpenOrCreate, FileAccess.ReadWrite);
             System.IO.StreamReader filestream = new System.IO.StreamReader(fs);
 

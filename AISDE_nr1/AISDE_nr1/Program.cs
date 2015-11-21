@@ -149,7 +149,6 @@ namespace AISDE_nr1
             {
                 Router router = new Router();
                 int t = 5000;
-                router.ReadFromFile();
                 router.Simulation(t);
 
 

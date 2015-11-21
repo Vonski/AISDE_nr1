@@ -10,6 +10,7 @@ namespace AISDE_nr1
     {
         public int size;
         public int priority;
+        public int adding_time;
 
         public Packet()
         {

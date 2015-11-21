@@ -9,7 +9,7 @@ namespace AISDE_nr1
     class Buffer
     {
         public Packet[] table = new Packet[1000];
-        private int first;
+        public int first;
         public int last;
         private int counter = 0;
         public int buffer_size;
@@ -46,6 +46,7 @@ namespace AISDE_nr1
             else
                 last++;
 
+            
             table[last] = new_packet;
             counter++;
             data_size += new_packet.size;
