@@ -9,7 +9,8 @@ namespace AISDE_nr1
     class Stream
     { 
         public int priority;
-        public double lambda;
+        public double time_lambda;
+        public double size_lambda;
         public int buffer_number;
         RandomValueGenerator random_value_generator;
 
@@ -17,7 +18,8 @@ namespace AISDE_nr1
         {
             random_value_generator = new RandomValueGenerator();
             priority = 1;
-            lambda = 1;
+            time_lambda = 1;
+            size_lambda = 1;
             buffer_number = 1;
         }
 
@@ -25,7 +27,8 @@ namespace AISDE_nr1
         {
             random_value_generator = new RandomValueGenerator();
             priority = 1;
-            lambda = 1;
+            time_lambda = 1;
+            size_lambda = 1;
             buffer_number = number;
         }
 
@@ -35,17 +38,17 @@ namespace AISDE_nr1
            this.priority = priority;
         }*/
 
-        public Packet GeneratePacket(double lambda)
+        public Packet GeneratePacket()
         {
             Packet packet = new Packet();
-            double size = random_value_generator.Exp_dist(lambda);
+            double size = random_value_generator.Exp_dist(size_lambda);
             packet.size = (int)Math.Ceiling(size);
             packet.priority = priority;
             return packet;
         }
-        public int GenerateTime(double lambda)
+        public int GenerateTime()
         {
-            double t = random_value_generator.Exp_dist(lambda);
+            double t = random_value_generator.Exp_dist(time_lambda);
             int time = (int)Math.Ceiling(t);
             return time;
         }

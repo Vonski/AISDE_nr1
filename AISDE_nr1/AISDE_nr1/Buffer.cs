@@ -12,7 +12,7 @@ namespace AISDE_nr1
         private int first;
         public int last;
         private int counter = 0;
-        private int buffer_size;
+        public int buffer_size;
         public int data_size;
 
         public Buffer()

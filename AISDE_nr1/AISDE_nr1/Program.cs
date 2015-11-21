@@ -147,47 +147,17 @@ namespace AISDE_nr1
 
             else if(option==2)
             {
-                Router router = new Router(2000, 4, 4);
-                router.packetToBuffer(0);
-                router.packetToBuffer(0);
-                router.packetToBuffer(1);
-                router.packetToBuffer(2);
-                router.packetToBuffer(3);
-                router.SendIni(router.heap.first().time);
-                router.send();
-                router.heap.WriteOut();
-                Console.WriteLine();
-                int p = 0, s = 0;
-                for (int i = 0; i < 400; i++)
-                {
-                    int n = router.heap.first().action;
-                    if(n == (int)Router.actions.packet_to_buffer)
-                    {
-                        router.packetToBuffer(router.heap.first().stream_id);
-                        p++;
-                    }
-                    else if(n == (int)Router.actions.send)
-                    {
-                        router.send();
-                        s++;
-                    }          
+                Router router = new Router();
+                int t = 5000;
+                router.ReadFromFile();
+                router.Simulation(t);
 
-                }
-                router.heap.WriteOut();
-                Console.WriteLine();
-                Console.WriteLine(p);
-                Console.WriteLine(s);
 
-                    Console.Read();
 
-                
+
+                Console.Read();
 
             }
-        
-
-            
         }
-
-        
     }
 }
