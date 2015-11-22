@@ -42,7 +42,7 @@ namespace AISDE_nr1
             int option = 2;
             if (option == 1)
             {
-               /* try
+                try
                 {
                     using (StreamReader sr = new StreamReader("input.txt"))
                     {
@@ -56,72 +56,9 @@ namespace AISDE_nr1
                 {
                     Console.WriteLine("The file could not be read:");
                     Console.WriteLine(e.Message);
-                }*/
-
-                //---------------------------------------------------------------------(DO WYKRESU)
-                //System.IO.StreamWriter filestream_list = new System.IO.StreamWriter("timelist.txt", false);
-                for(int n=0; n<50;n++)
-                {
-                    string str = n.ToString() + ".txt";
-                System.IO.StreamWriter filestream_heap = new System.IO.StreamWriter(str, false);
-                Stopwatch stopwatch = new Stopwatch();
-                UnorderedList<Element> unordered_list = new UnorderedList<Element>();
-                Heap<Element> heap = new Heap<Element>();
-                           
-                while(A<=10000)
-                {               
-                    /*if(A==1)
-                    {
-                        for(int n=0; n<2; n++)
-                        {
-                            stopwatch.Restart();
-                            Test<UnorderedList<Element>>(unordered_list);
-                            stopwatch.Stop();
-                            TimeSpan a = stopwatch.Elapsed
-
-
-                            stopwatch.Restart();
-                            Test<Heap<Element>>(heap);
-                            stopwatch.Stop();
-                            TimeSpan b = stopwatch.Elapsed;
-
-
-                           // string timelist1 = a.TotalMilliseconds.ToString();
-                            string timeheap1 = b.TotalMilliseconds.ToString();
-
-                            //filestream_list.WriteLine(timelist1);
-                            filestream_heap.WriteLine(timeheap1);
-                        }
-                    }*/
-
-                    /*stopwatch.Restart();
-                    Test<UnorderedList<Element>>(unordered_list);
-                    stopwatch.Stop();
-                    TimeSpan x = stopwatch.Elapsed;*/
-
-
-                    stopwatch.Restart();
-                    Test<Heap<Element>>(heap);
-                    stopwatch.Stop();
-                    TimeSpan y = stopwatch.Elapsed;
-
-                    
-                    //string timelist = x.TotalMilliseconds.ToString();
-                    string timeheap = y.TotalMilliseconds.ToString();
-
-                   // filestream_list.WriteLine(timelist);
-                    filestream_heap.WriteLine(timeheap);
-                   
-                    A=A+10;
                 }
-                //filestream_list.Close();
-                filestream_heap.Close();
-                A = 1;
-            }
-                
-                //---------------------------------------------------------------------------------
 
-                /*Stopwatch stopwatch = new Stopwatch();
+                Stopwatch stopwatch = new Stopwatch();
                 UnorderedList<Element> unordered_list = new UnorderedList<Element>();
                 Heap<Element> heap = new Heap<Element>();
 
@@ -140,9 +77,44 @@ namespace AISDE_nr1
                 string elapsedTimeHeap = y.TotalMilliseconds.ToString() + "ms";
 
                 System.IO.File.WriteAllText("output.txt", "M=" + M + "\r\nN=" + N + "\r\nA=" + A + "\r\nB=" + B +
-                            "\r\nUnordered List: " + elapsedTimeList + "\r\nHeap: " + elapsedTimeHeap);*/
+                            "\r\nUnordered List: " + elapsedTimeList + "\r\nHeap: " + elapsedTimeHeap);
 
-               
+                //---------------------------------------------------------------------(DO WYKRESU)
+                /*System.IO.StreamWriter filestream_list = new System.IO.StreamWriter("timelist.txt", false);
+                System.IO.StreamWriter filestream_heap = new System.IO.StreamWriter("timeheap.txt", false);
+                Stopwatch stopwatch = new Stopwatch();
+                UnorderedList<Element> unordered_list = new UnorderedList<Element>();
+                Heap2<Element> heap = new Heap2<Element>();
+                A=1;
+                           
+                while(A<=10000)
+                {               
+                    stopwatch.Restart();
+                    Test<UnorderedList<Element>>(unordered_list);
+                    stopwatch.Stop();
+                    TimeSpan x = stopwatch.Elapsed;
+
+
+                    stopwatch.Restart();
+                    Test<Heap2<Element>>(heap);
+                    stopwatch.Stop();
+                    TimeSpan y = stopwatch.Elapsed;
+
+                    
+                    string timelist = x.TotalMilliseconds.ToString();
+                    string timeheap = y.TotalMilliseconds.ToString();
+
+                    filestream_list.WriteLine(timelist);
+                    filestream_heap.WriteLine(timeheap);
+                   
+                    A=A+10;
+                }
+                filestream_list.Close();
+                filestream_heap.Close();*/
+                            
+                //---------------------------------------------------------------------------------
+
+                              
             }
 
             else if(option==2)
