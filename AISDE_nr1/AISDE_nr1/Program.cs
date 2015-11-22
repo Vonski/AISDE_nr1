@@ -148,13 +148,13 @@ namespace AISDE_nr1
             else if(option==2)
             {
                 Router router = new Router();
-                int t = 500000;
+                int t;
+                Console.Write("Podaj czas symulacji(w sekundach): ");
+                t = Console.Read() * 1000;
                 router.Simulation(t);
 
-
-
-
-                Console.Read();
+                Console.ReadLine();
+                Console.ReadLine();
 
             }
         }

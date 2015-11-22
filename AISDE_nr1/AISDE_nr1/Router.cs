@@ -18,10 +18,12 @@ namespace AISDE_nr1
         bool flag;   //0, jezeli send zwrocil false
         enum actions { packet_to_buffer, send };
 
-        Buffer[] buffers;
-        string[] names_of_streams;
-        Stream[] streams;
-        Heap2<Times> heap;
+        Buffer[] buffers;       // zbiór kolejek
+        string[] names_of_streams;      // zbiór nazw strumieni
+        Stream[] streams;       // zbiór strumieni
+        Heap2<Times> heap;      // kolejka zdarzeń
+
+        Times new_send;         // zmienna sterujaca operacja wysylania
 
         // STATISTICS FIELDS
         Stopwatch simulation_timer;
@@ -36,13 +38,8 @@ namespace AISDE_nr1
         double free_link2;
         double[] free_buffers2;
         double simulation_time;
-        double pakiety_nie_odrzucone;
-
-        double sredni_pakiet;
-        double sredni_czas_nadejscia;
-
-        bool is_buffer_empty;
-        Times new_send;
+        
+        
 
         // EVENT DATA MEDIUM
         private struct Times : IComparable
@@ -72,7 +69,6 @@ namespace AISDE_nr1
         public void Simulation(int sim_time)
         {
             // Symulacja
-            int p = 0, s = 0;
             simulation_time = sim_time;
             simulation_timer.Start();
             while (heap.first().time < sim_time)
@@ -87,13 +83,10 @@ namespace AISDE_nr1
                 if (n == (int)Router.actions.packet_to_buffer)
                 {
                     packetToBuffer(heap.first().stream_id);
-                    p++;
                 }
                 else if (n == (int)Router.actions.send)
                 {
-                    if(!is_buffer_empty)
-                        if (send())
-                            s++;
+                    send();
                 }
 
             }
@@ -117,7 +110,6 @@ namespace AISDE_nr1
                 Console.WriteLine(100 - free_link2 / simulation_time * 100 + "%");
             else
                 Console.WriteLine("0% (Przy dużych przepustowościach błędy jakimi obarczone są operacje arytmetyczne w systemie dyskretnym uniemożliwiają dokładne wyliczenie wartości, jednak różni się ona pomijalnie od zera, więc przyjmujemy wartość zero)");
-            Console.WriteLine(free_link2/simulation_time);
             Console.WriteLine();
 
             Console.WriteLine("Średnie zajętości kolejek (jeżeli 0%, to wartość na tyle zbliżona do zera, że jest to pomijalne)");
@@ -131,23 +123,15 @@ namespace AISDE_nr1
             Console.WriteLine("Prawdopodobieństwo odrzucenia pakietu dla poszczególnych strumieni");
             for (int i = 0; i < number_of_streams; i++)
             {
-                Console.Write("Prawdopodobieństwo odrzucenia pakietu dla strumienia {0}: ", i);
+                Console.Write("Prawdopodobieństwo odrzucenia pakietu dla strumienia {0}: ", names_of_streams[i]);
                 Console.WriteLine((double)losted_packets_counter[i] / packets_counter[i] * 100 + "%");
             }
             Console.WriteLine();
 
             Console.Write("Średni czas przetwarzania pakietu w systemie(tylko wysłane): ");
             Console.WriteLine((packet_processing_mil/sended_packet_counter) + " ms");
-            Console.WriteLine((packet_processing_mil) + " ms");
-            Console.WriteLine(p);
-            Console.WriteLine(s);
-            Console.WriteLine(sended_packet_counter);
-            Console.WriteLine(losted_packets_counter[0]);
 
-
-            Console.WriteLine();
-            Console.WriteLine(sredni_pakiet/pakiety_nie_odrzucone);
-            Console.WriteLine(sredni_czas_nadejscia/pakiety_nie_odrzucone);
+            
 
             // Generowanie pliku wyjściowego
             WriteToFile();
@@ -156,31 +140,36 @@ namespace AISDE_nr1
         // PACKETS QUEUING HANDLER
         private void packetToBuffer(int stream_id)
         {
+            // Local variables initialization
             Packet packet = streams[stream_id].GeneratePacket();
-            //packet.size = 4000;
             Times times = new Times();
             double t = heap.first().time;
-            packet.adding_time = t;
             double pom = streams[stream_id].GenerateTime();
+
+            // Here you can test router logic using const values by uncomment next to lines
+            //packet.size = 4000;
             //pom = 0.5;
+
+            // Events queue handling
+            packet.adding_time = t;
             times.time = pom + t;
             times.action = (int)actions.packet_to_buffer;
             times.stream_id = stream_id;
             if (heap.counter!=0 && heap.first().stream_id==stream_id)
                 heap.Delete();
             heap.Add(times);
+
             int size = buffers[streams[stream_id].buffer_number].data_size;
+            // Statistics collecting
             packets_counter[stream_id]++;
 
-            sredni_pakiet = sredni_pakiet + packet.size;
-            sredni_czas_nadejscia = sredni_czas_nadejscia + pom;
-            pakiety_nie_odrzucone++;
-
-            if (buffers[streams[stream_id].buffer_number].Add(packet))
+            if (buffers[streams[stream_id].buffer_number].Add(packet))      // Adding packet to buffer
             {
+                // Statistics collecting
                 free_buffers2[streams[stream_id].buffer_number] = free_buffers2[streams[stream_id].buffer_number] + (t - last_buffer_modify_time[streams[stream_id].buffer_number])*(double)size;
                 last_buffer_modify_time[streams[stream_id].buffer_number] = t;
                 
+                // Send event handling
                 if (flag == false)
                 {
                     if (new_send.time <= t || new_send.time==simulation_time)
@@ -194,13 +183,12 @@ namespace AISDE_nr1
                     {
                         new_send.time = times.time;
                     }
-                    //flag = true;
                 }
                 
             }
             else
             {
-                losted_packets_counter[stream_id]++;
+                losted_packets_counter[stream_id]++;        // Statistics of losted packets
             }
         }
 
@@ -210,33 +198,46 @@ namespace AISDE_nr1
             Times times = new Times();
             for (int i = 0; i < number_of_buffers; i++)
             {
-                if (buffers[i].data_size > 0)
+                if (buffers[i].data_size > 0)       // Looking for not empty buffers in priority order
                 {
+                    // Local variables intialization
                     double t = heap.first().time;
                     double tmp = ((double)buffers[i].table[buffers[i].first].size) * 1000 / channel_capacity;
+
+                    // Checking if the packet has already arrived
                     if (t - tmp < buffers[i].table[buffers[i].first].adding_time)
                         continue;
+
+                    // Events queue handling
                     times.time = tmp + t;
                     times.action = (int)actions.send;
                     if (heap.counter!=0 && heap.first().action==1)
                         heap.Delete();
                     heap.Add(times);
-                    // stata
-                    if(!flag)
+
+                    // Statistics collecting
+                    if (!flag)
                         free_link2 = free_link2 + t - last_link_modify_time;
                     packet_processing_mil += tmp;
                     if(tmp != 0)
                         sended_packet_counter++;
-                    // end of stata
+
+                    // Sending packet out of router
                     buffers[i].PullOut();
+
+                    // Send event handling
                     flag = true;
                     return true;
                 }
             }
+            // Statistics collecting
             last_link_modify_time = heap.first().time;
+
+            // Events queue handling
             if (heap.counter != 0 && heap.first().action == 1)
                 heap.Delete();
-            
+
+            // Send event handling
             flag = false;
             return false; 
         }                 
@@ -345,8 +346,9 @@ namespace AISDE_nr1
                 size_lambdas[i] = words[11];
             }
             filestream.Close();
-            // Koniec pobierania z pliku
+            // End of file reading
 
+            // Setting up initial values
             flag = true;
             buffers = new Buffer[number_of_buffers];
             streams = new Stream[number_of_streams];
@@ -433,7 +435,7 @@ namespace AISDE_nr1
             filestream.WriteLine("Prawdopodobieństwo odrzucenia pakietu dla poszczególnych strumieni");
             for (int i = 0; i < number_of_streams; i++)
             {
-                filestream.Write("Prawdopodobieństwo odrzucenia pakietu dla strumienia {0}: ", i);
+                filestream.Write("Prawdopodobieństwo odrzucenia pakietu dla strumienia {0}: ", names_of_streams[i]);
                 filestream.WriteLine((double)losted_packets_counter[i] / packets_counter[i] * 100 + "%");
             }
             filestream.WriteLine();
