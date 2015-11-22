@@ -36,10 +36,7 @@ namespace AISDE_nr1
                 return false;
 
             if (data_size + new_packet.size > buffer_size)
-            {
-                //Console.WriteLine("Za mala pojemnosc bufora");
                 return false;
-            }
 
             if (last==table.Length-1)
                 last = 0;

@@ -124,7 +124,7 @@ namespace AISDE_nr1
             for (int i = 0; i < number_of_buffers; i++)
             {
                 Console.Write("Średnia zajętość kolejki KOL{0}: ", i);
-                Console.WriteLine(free_buffers2[i] / simulation_time / buffers[i].buffer_size * 100 + "%");
+                Console.WriteLine(free_buffers2[i] / simulation_time + " bitow srednio ");
             }
             Console.WriteLine();
 
@@ -426,7 +426,7 @@ namespace AISDE_nr1
             for (int i = 0; i < number_of_buffers; i++)
             {
                 filestream.Write("Średnia zajętość kolejki KOL{0}: ",i);
-                filestream.WriteLine(free_buffers2[i] / simulation_time / buffers[i].buffer_size * 100 + "%");
+                filestream.WriteLine(free_buffers2[i] / simulation_time + " bitów znajdowalo sie srednio w kolejce ");
             }
             filestream.WriteLine();
 
@@ -439,9 +439,10 @@ namespace AISDE_nr1
             filestream.WriteLine();
 
             filestream.Write("Średni czas przetwarzania pakietu w systemie(tylko wysłane): ");
-            filestream.WriteLine(packet_processing_mil + " ms");
+            filestream.WriteLine((packet_processing_mil / sended_packet_counter) + " ms");
 
             filestream.Close();
+
         }
     }
 }

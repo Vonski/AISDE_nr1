@@ -32,16 +32,10 @@ namespace AISDE_nr1
             buffer_number = number;
         }
 
-        /*public Stream(int priority)
-        {   
-           random_value_generator = new RandomValueGenerator();
-           this.priority = priority;
-        }*/
-
         public Packet GeneratePacket()
         {
             Packet packet = new Packet();
-            double size = random_value_generator.Exp_dist(size_lambda);
+            double size = random_value_generator.Exp_dist(size_lambda/8);
             packet.size = (int)Math.Ceiling(size);
             packet.priority = priority;
             return packet;
