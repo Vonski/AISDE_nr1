@@ -148,7 +148,7 @@ namespace AISDE_nr1
             else if(option==2)
             {
                 Router router = new Router();
-                int t = 5000;
+                int t = 500000;
                 router.Simulation(t);
 
 

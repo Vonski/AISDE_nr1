@@ -8,7 +8,7 @@ namespace AISDE_nr1
 {
     class Buffer
     {
-        public Packet[] table = new Packet[1000];
+        public Packet[] table = new Packet[1000000];
         public int first;
         public int last;
         private int counter = 0;
@@ -37,7 +37,7 @@ namespace AISDE_nr1
 
             if (data_size + new_packet.size > buffer_size)
             {
-                Console.WriteLine("Za mala pojemnosc bufora");
+                //Console.WriteLine("Za mala pojemnosc bufora");
                 return false;
             }
 

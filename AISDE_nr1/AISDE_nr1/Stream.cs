@@ -46,11 +46,10 @@ namespace AISDE_nr1
             packet.priority = priority;
             return packet;
         }
-        public int GenerateTime()
+        public double GenerateTime()
         {
             double t = random_value_generator.Exp_dist(time_lambda);
-            int time = (int)Math.Ceiling(t);
-            return time;
+            return t*1000;
         }
     }
 }
