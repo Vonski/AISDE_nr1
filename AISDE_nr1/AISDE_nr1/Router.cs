@@ -245,10 +245,10 @@ namespace AISDE_nr1
         private void ReadFromFile()
         {
             Console.WriteLine("Przeciagnij plik inicjalizacyjny i wcisnij enter:");
-            //string str = Console.ReadLine();
-            //if (str[0] == '"')
-            //   str = str.Substring(1,str.Length-2);
-            string str = "F:\\Multimedia\\Dokumenty\\Studia\\PW Notatki\\Semestr 3\\AISDE\\Projekty\\Projekt1\\AISDE_nr1\\AISDE_nr1\\bin\\Debug\\Download\\Input\\router.txt";
+            string str = Console.ReadLine();
+            if (str[0] == '"')
+               str = str.Substring(1,str.Length-2);
+            //string str = "F:\\Multimedia\\Dokumenty\\Studia\\PW Notatki\\Semestr 3\\AISDE\\Projekty\\Projekt1\\AISDE_nr1\\AISDE_nr1\\bin\\Debug\\Download\\Input\\router.txt";
             FileStream fs = new FileStream(str, FileMode.OpenOrCreate, FileAccess.ReadWrite);
             System.IO.StreamReader filestream = new System.IO.StreamReader(fs);
 
