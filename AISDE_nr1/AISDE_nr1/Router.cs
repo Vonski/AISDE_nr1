@@ -38,7 +38,6 @@ namespace AISDE_nr1
         double free_link2;
         double[] free_buffers2;
         double simulation_time;
-        double[] end_simulation_time;
         
         
 
@@ -95,7 +94,18 @@ namespace AISDE_nr1
             for(int i = 0; i < number_of_buffers; i++)
             {
                 // Statistics collecting
-                end_simulation_time[i] = buffers[i].table[buffers[i].first].adding_time;
+
+                while(true)
+                {
+                    if (buffers[i].table[buffers[i].first].adding_time < simulation_time && (buffers[i].last!=-1))
+                    {
+                        free_buffers2[i] += (simulation_time - buffers[i].table[buffers[i].first].adding_time) * (double)buffers[i].table[buffers[i].first].size;
+                        buffers[i].PullOut();
+                    }
+                    else
+                        break;
+                }
+                    
             }
             simulation_timer.Stop();
             simulation = simulation_timer.Elapsed;
@@ -118,7 +128,7 @@ namespace AISDE_nr1
             for (int i = 0; i < number_of_buffers; i++)
             {
                 Console.Write("Średnia zajętość kolejki KOL{0}: ", i);
-                Console.WriteLine(free_buffers2[i] / end_simulation_time[i] + " bitow srednio ");
+                Console.WriteLine(free_buffers2[i] / simulation_time + " bitow srednio ");
             }
             Console.WriteLine();
 
@@ -389,13 +399,11 @@ namespace AISDE_nr1
             // Statistics init
             simulation_timer = new Stopwatch();
             last_buffer_modify_time = new double[number_of_buffers];
-            end_simulation_time = new double[number_of_buffers];
             free_buffers2 = new double[number_of_buffers];
             for (int i = 0; i < number_of_buffers; i++)
             {
                 last_buffer_modify_time[i] = new double();
                 free_buffers2[i] = new double();
-                end_simulation_time[i] = new double();
             }
             losted_packets_counter = new int[number_of_streams];
             packets_counter = new int[number_of_streams];
@@ -432,7 +440,7 @@ namespace AISDE_nr1
             for (int i = 0; i < number_of_buffers; i++)
             {
                 filestream.Write("Średnia zajętość kolejki KOL{0}: ",i);
-                filestream.WriteLine(free_buffers2[i] / end_simulation_time[i] + " bitów znajdowalo sie srednio w kolejce ");
+                filestream.WriteLine(free_buffers2[i] / simulation_time + " bitów znajdowalo sie srednio w kolejce ");
             }
             filestream.WriteLine();
 
