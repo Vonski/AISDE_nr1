@@ -38,6 +38,7 @@ namespace AISDE_nr1
         double free_link2;
         double[] free_buffers2;
         double simulation_time;
+        double[] end_simulation_time;
         
         
 
@@ -69,12 +70,13 @@ namespace AISDE_nr1
         public void Simulation(int sim_time)
         {
             // Symulacja
+            new_send.time = sim_time;
             simulation_time = sim_time;
             simulation_timer.Start();
             while (heap.first().time < sim_time)
             {
                 int n = heap.first().action;
-                if (new_send.time < heap.first().time)
+                if (new_send.time <= heap.first().time)
                 {
                     heap.Add(new_send);
                     new_send.time = sim_time;
@@ -92,8 +94,8 @@ namespace AISDE_nr1
             }
             for(int i = 0; i < number_of_buffers; i++)
             {
-                free_buffers2[i] = free_buffers2[i] + (sim_time - last_buffer_modify_time[i]) * buffers[i].data_size;
-                last_buffer_modify_time[i] = sim_time;
+                // Statistics collecting
+                end_simulation_time[i] = buffers[i].table[buffers[i].first].adding_time;
             }
             simulation_timer.Stop();
             simulation = simulation_timer.Elapsed;
@@ -116,7 +118,7 @@ namespace AISDE_nr1
             for (int i = 0; i < number_of_buffers; i++)
             {
                 Console.Write("Średnia zajętość kolejki KOL{0}: ", i);
-                Console.WriteLine(free_buffers2[i] / simulation_time + " bitow srednio ");
+                Console.WriteLine(free_buffers2[i] / end_simulation_time[i] + " bitow srednio ");
             }
             Console.WriteLine();
 
@@ -151,7 +153,7 @@ namespace AISDE_nr1
             //pom = 0.5;
 
             // Events queue handling
-            packet.adding_time = t;
+            packet.adding_time = t + pom;
             times.time = pom + t;
             times.action = (int)actions.packet_to_buffer;
             times.stream_id = stream_id;
@@ -165,23 +167,20 @@ namespace AISDE_nr1
 
             if (buffers[streams[stream_id].buffer_number].Add(packet))      // Adding packet to buffer
             {
-                // Statistics collecting
-                free_buffers2[streams[stream_id].buffer_number] = free_buffers2[streams[stream_id].buffer_number] + (t - last_buffer_modify_time[streams[stream_id].buffer_number])*(double)size;
-                last_buffer_modify_time[streams[stream_id].buffer_number] = t;
-                
                 // Send event handling
                 if (flag == false)
                 {
+                    int id = streams[stream_id].buffer_number;
                     if (new_send.time <= t || new_send.time==simulation_time)
                     {
                         Times times1 = new Times();
                         times1.action = 1;
-                        times1.time = times.time + 0.000001;
+                        times1.time = buffers[id].table[buffers[id].first].adding_time + 0.000001;
                         new_send = times1;
                     }
-                    else if (new_send.time > times.time)
+                    else if (new_send.time > times.time + ((double)buffers[id].table[buffers[id].first].size) * 1000 / channel_capacity)
                     {
-                        new_send.time = times.time;
+                        new_send.time = buffers[id].table[buffers[id].first].adding_time + 0.000001;
                     }
                 }
                 
@@ -205,7 +204,7 @@ namespace AISDE_nr1
                     double tmp = ((double)buffers[i].table[buffers[i].first].size) * 1000 / channel_capacity;
 
                     // Checking if the packet has already arrived
-                    if (t - tmp < buffers[i].table[buffers[i].first].adding_time)
+                    if (t < buffers[i].table[buffers[i].first].adding_time)
                         continue;
 
                     // Events queue handling
@@ -218,9 +217,12 @@ namespace AISDE_nr1
                     // Statistics collecting
                     if (!flag)
                         free_link2 = free_link2 + t - last_link_modify_time;
-                    packet_processing_mil += tmp;
+                    packet_processing_mil += tmp + t - buffers[i].table[buffers[i].first].adding_time;
                     if(tmp != 0)
                         sended_packet_counter++;
+
+                    // Statistics collecting
+                    free_buffers2[i] = free_buffers2[i] + (t + tmp - buffers[i].table[buffers[i].first].adding_time) * (double)buffers[i].table[buffers[i].first].size;
 
                     // Sending packet out of router
                     buffers[i].PullOut();
@@ -387,11 +389,13 @@ namespace AISDE_nr1
             // Statistics init
             simulation_timer = new Stopwatch();
             last_buffer_modify_time = new double[number_of_buffers];
+            end_simulation_time = new double[number_of_buffers];
             free_buffers2 = new double[number_of_buffers];
             for (int i = 0; i < number_of_buffers; i++)
             {
                 last_buffer_modify_time[i] = new double();
                 free_buffers2[i] = new double();
+                end_simulation_time[i] = new double();
             }
             losted_packets_counter = new int[number_of_streams];
             packets_counter = new int[number_of_streams];
@@ -428,7 +432,7 @@ namespace AISDE_nr1
             for (int i = 0; i < number_of_buffers; i++)
             {
                 filestream.Write("Średnia zajętość kolejki KOL{0}: ",i);
-                filestream.WriteLine(free_buffers2[i] / simulation_time + " bitów znajdowalo sie srednio w kolejce ");
+                filestream.WriteLine(free_buffers2[i] / end_simulation_time[i] + " bitów znajdowalo sie srednio w kolejce ");
             }
             filestream.WriteLine();
 
