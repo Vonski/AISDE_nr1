@@ -24,6 +24,7 @@ namespace AISDE_nr1
         Heap2<Times> heap;      // kolejka zdarzeń
 
         Times new_send;         // zmienna sterujaca operacja wysylania
+        double wyslane = 0;
 
         // STATISTICS FIELDS
         Stopwatch simulation_timer;
@@ -66,7 +67,7 @@ namespace AISDE_nr1
         }
 
         // ROUTER SIMULATION INITIALIZATION
-        public void Simulation(int sim_time)
+        public void Simulation(double sim_time)
         {
             // Symulacja
             new_send.time = sim_time;
@@ -142,6 +143,11 @@ namespace AISDE_nr1
 
             Console.Write("Średni czas przetwarzania pakietu w systemie(tylko wysłane): ");
             Console.WriteLine((packet_processing_mil/sended_packet_counter) + " ms");
+            Console.WriteLine();
+            Console.WriteLine(heap.zdarzenia);
+            Console.WriteLine(wyslane);
+            Console.WriteLine(heap.zdarzenia - wyslane);
+            Console.WriteLine(buffers[0].counter);
 
             
 
@@ -239,6 +245,7 @@ namespace AISDE_nr1
 
                     // Send event handling
                     flag = true;
+                    wyslane++;
                     return true;
                 }
             }

@@ -11,7 +11,7 @@ namespace AISDE_nr1
         public Packet[] table = new Packet[1000000];
         public int first;
         public int last;
-        private int counter = 0;
+        public int counter = 0;
         public int buffer_size;
         public int data_size;
 

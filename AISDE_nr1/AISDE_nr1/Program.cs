@@ -120,12 +120,12 @@ namespace AISDE_nr1
             else if(option==2)
             {
                 Router router = new Router();
-                int t;
+                double t;
                 Console.Write("Podaj czas symulacji(w sekundach): ");
-                t = Console.Read() * 1000;
+                t = double.Parse(Console.ReadLine());
+                t*=1000;
                 router.Simulation(t);
 
-                Console.ReadLine();
                 Console.ReadLine();
 
             }

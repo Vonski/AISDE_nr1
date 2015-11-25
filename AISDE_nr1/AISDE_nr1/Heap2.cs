@@ -11,6 +11,7 @@ namespace AISDE_nr1
         //Fields:
         public ElementType[] table = new ElementType[1];
         public int counter = 0;
+        public double zdarzenia = 0;
 
 
         //Methods:
@@ -27,6 +28,7 @@ namespace AISDE_nr1
             }
             table[counter++] = element;
             PushUp(counter - 1);
+            zdarzenia++;
 
         }
 
